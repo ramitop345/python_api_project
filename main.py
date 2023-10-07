@@ -33,9 +33,17 @@ async def create_posts(post: Post):
 async def get_posts():
     return {"data": my_posts}
 
+
+#our latest path will be confused with if if not implemented above the get request with id
+@app.get("/posts/latest")
+async def get_latest_post():
+    post = my_posts[:-1]
+    return {"latest_post": post}
+
 #the id is always a string so manually convert in to int if needed
 @app.get("/posts/{id}")
 async def get_post(id: int):
     post = find_post_by_id(id)
     return {"Post details": post}
-    
+
+
