@@ -15,3 +15,4 @@ this is a course to learn basics of Python API Project
 - install postman to manage your http request froom fastapi
 - install pydantic if not installed to validate request 
   data(check in LIB if installed)
+- <from typing import optional> to add optional attributes to your post request Body

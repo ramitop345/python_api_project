@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI
 from fastapi.params import Body
 from fastapi.logger import logger
@@ -10,10 +11,13 @@ class Post(BaseModel):
     title: str
     content: str
     published: bool = True
+    rating: Optional[int] = None
 
 @app.post("/createposts/")
 async def create_posts(new_post: Post):
     print(new_post.title)
+
+    print(new_post.model_dump())
     return {"data": new_post}
     
 
