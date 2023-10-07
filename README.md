@@ -16,3 +16,4 @@ this is a course to learn basics of Python API Project
 - install pydantic if not installed to validate request 
   data(check in LIB if installed)
 - <from typing import optional> to add optional attributes to your post request Body
+- import also status and HTTPException from fastAPI to manage http responses
