@@ -13,3 +13,5 @@ this is a course to learn basics of Python API Project
 - go to fastapi.tiangolo.com/tutorial/first-steps/ for first use 
 - install uvicorn(if not installed) : pip install uvicorn
 - install postman to manage your http request froom fastapi
+- install pydantic if not installed to validate request 
+  data(check in LIB if installed)
