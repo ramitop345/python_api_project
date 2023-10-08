@@ -28,3 +28,10 @@ use command <uvicorn app.main:app> to access the fastAPI
  ----------------MYSQL------------------
 
 - install mysql dbms package: <pip install mysql-connector-python>
+- connect to Mysql server
+-one way is to manually create queries using normal sql commands.
+
+- you can also use an ORM (Object Relational Mapper)
+- the most known is SQLALCHEMY
+- The ORM helps use classes as Models for our database
+- to install sqlalchemy: <pip install sqlalchemy>
