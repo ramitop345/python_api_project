@@ -35,3 +35,4 @@ use command <uvicorn app.main:app> to access the fastAPI
 - the most known is SQLALCHEMY
 - The ORM helps use classes as Models for our database
 - to install sqlalchemy: <pip install sqlalchemy>
+- search in fastapi documentation for SQL relational Databases and follow the steps 

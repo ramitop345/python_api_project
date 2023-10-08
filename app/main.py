@@ -1,10 +1,17 @@
 from datetime import datetime
 from typing import Optional
-from fastapi import FastAPI, Response, status, HTTPException
+from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from fastapi.logger import logger
 from pydantic import BaseModel
 import mysql.connector
+from . import models
+from .database import engine, get_db
+from sqlalchemy.orm import Session
+
+
+
+models.Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()
@@ -23,16 +30,13 @@ try:
 except mysql.connector.Error as err:
     print(f"Error: {err}")
 
-posts = "CREATE TABLE IF NOT EXISTS posts (id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(250) NOT NULL, content VARCHAR(3000) NOT NULL, published DATETIME DEFAULT CURRENT_TIMESTAMP)"
-cursor.execute(posts)
 
-connection.commit()
 
 # it is used for validation when requesting datafrom databank
 class Post(BaseModel):
     title: str
     content: str
-    published: datetime
+    published: bool = True
     rating: Optional[int] = None
 
 
@@ -60,13 +64,15 @@ def delete_post(id: int):
 
 def update_post(id: int, post: Post):
     update_query = "UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s"
-    new_date = datetime.now()
-    values = (post.title, post.content, new_date, id)
+    values = (post.title, post.content, post.published, id)
     cursor.execute(update_query, values)
     return cursor.rowcount > 0
 
-
-
+##################################
+@app.get("/sqlalchemy")
+def test_get(db: Session = Depends(get_db)):
+    return {"status": "success"}
+#################
 
 
 @app.get("/")
