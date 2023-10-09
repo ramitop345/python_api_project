@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated = "auto")
-router = APIRouter(prefix = "/posts")
+router = APIRouter(prefix = "/posts", tags = ['posts'])
 
 
 @router.post("/", status_code = status.HTTP_201_CREATED, response_model = schemas.Post)
