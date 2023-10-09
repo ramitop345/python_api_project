@@ -1,4 +1,5 @@
-import datetime
+from datetime import datetime
+from typing import Any
 from pydantic import BaseModel
 # it is used for validation when requesting datafrom databank
 class Post(BaseModel):
@@ -17,8 +18,8 @@ class PostCreate(PostBase):
 
 class Post(PostBase):
     id: int 
-    created_at: datetime
+    created_at: Any
     #this helps pydantic to recognise the output as dictionary although it is a class
     #this helps limit the number of data that will be returned as response to a query
-    class config:
-        orm_mode = True
+    class Config:
+        from_attributes = True
