@@ -38,6 +38,7 @@ use command <uvicorn app.main:app> to access the fastAPI
 - search in fastapi documentation for SQL relational Databases and follow the steps 
 - instsall email validator if not already installded to validate emails: <pip install pydantic[email]>
 - install passlib to handle password hashes(password encryption) <pip install passlib[bcrypt]>
+- install python-jose[cryptography] to manage JWT encryption mechanisymn <pip install python-jose[cryptography]>
 
 
 ****************These are query methods to communicate with mysql manually without ORM************************
