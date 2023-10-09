@@ -6,10 +6,10 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated = "auto")
-router = APIRouter()
+router = APIRouter(prefix = "/posts")
 
 
-@router.post("/posts", status_code = status.HTTP_201_CREATED, response_model = schemas.Post)
+@router.post("/", status_code = status.HTTP_201_CREATED, response_model = schemas.Post)
 async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db)):
     query = models.Post(**post.model_dump())
     db.add(query)
@@ -20,14 +20,14 @@ async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db)):
                             detail = f"post was not created")
     return query
 
-@router.get("/posts", response_model = List[schemas.Post])
+@router.get("/", response_model = List[schemas.Post])
 async def get_all_posts(db: Session = Depends(get_db)):
     query = db.query(models.Post).all()
     return query
 
 
 #the id is always a string so manually convert in to int if needed
-@router.get("/posts/{id}", response_model = schemas.Post)
+@router.get("/{id}", response_model = schemas.Post)
 async def get(id: int, db: Session = Depends(get_db)):
     query = db.query(models.Post).filter(models.Post.id == id).first()
     if query is None:
@@ -36,7 +36,7 @@ async def get(id: int, db: Session = Depends(get_db)):
     return query
 
 
-@router.delete("/posts/{id}")
+@router.delete("/{id}")
 def delete(id:int, db: Session = Depends(get_db)):
     query = db.query(models.Post).filter(models.Post.id == id)
     
@@ -49,7 +49,7 @@ def delete(id:int, db: Session = Depends(get_db)):
 
 
 
-@router.put("/posts/{id}", status_code = status.HTTP_200_OK)
+@router.put("/{id}", status_code = status.HTTP_200_OK)
 def update(id: int, post: schemas.PostCreate, db: Session = Depends(get_db)):
     query = db.query(models.Post).filter(models.Post.id == id)
 
