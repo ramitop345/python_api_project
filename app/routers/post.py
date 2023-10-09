@@ -37,7 +37,7 @@ async def get(id: int, db: Session = Depends(get_db)):
 
 
 @router.delete("/{id}")
-def delete(id:int, db: Session = Depends(get_db)):
+def delete(id:int, db: Session = Depends(get_db), get_current_user: int = Depends(oauth2.get_current_user)):
     query = db.query(models.Post).filter(models.Post.id == id)
     
     if query.first() is None:
@@ -50,7 +50,7 @@ def delete(id:int, db: Session = Depends(get_db)):
 
 
 @router.put("/{id}", status_code = status.HTTP_200_OK)
-def update(id: int, post: schemas.PostCreate, db: Session = Depends(get_db)):
+def update(id: int, post: schemas.PostCreate, db: Session = Depends(get_db), get_current_user: int = Depends(oauth2.get_current_user)):
     query = db.query(models.Post).filter(models.Post.id == id)
 
     if query.first() is None:
