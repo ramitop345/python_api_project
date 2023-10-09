@@ -3,7 +3,9 @@ from . import models, schemas
 from typing import List
 from .database import engine, get_db
 from sqlalchemy.orm import Session
+from passlib.context import CryptContext
 
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated = "auto")
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -67,6 +69,8 @@ def update(id: int, post: schemas.PostCreate, db: Session = Depends(get_db)):
 
 @app.post("/users", status_code = status.HTTP_201_CREATED, response_model = schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    hashed_password = pwd_context.hash(user.password)
+    user.password = hashed_password
     query = models.User(**user.model_dump())
     db.add(query)
     db.commit()
@@ -104,6 +108,8 @@ def delete(id:int, db: Session = Depends(get_db)):
 
 @app.put("/users/{id}", status_code = status.HTTP_200_OK)
 def update(id: int, user: schemas.UserCreate, db: Session = Depends(get_db)):
+    hashed_password = pwd_context.hash(user.password)
+    user.password = hashed_password
     query = db.query(models.User).filter(models.User.id == id)
 
     if query.first() is None:
