@@ -3,25 +3,14 @@ from typing import Optional
 from fastapi import FastAPI, Response, status, HTTPException, Depends
 from fastapi.params import Body
 from fastapi.logger import logger
-from pydantic import BaseModel
 import mysql.connector
-from . import models
+from . import models, schemas
 from .database import engine, get_db
 from sqlalchemy.orm import Session
 
-
-
 models.Base.metadata.create_all(bind=engine)
 
-
 app = FastAPI()
-
-
-# it is used for validation when requesting datafrom databank
-class Post(BaseModel):
-    title: str
-    content: str
-    published: bool = True
 
 
 @app.get("/")
@@ -29,7 +18,7 @@ async def root():
     return {"message": "Hello World"}
 
 @app.post("/posts", status_code = status.HTTP_201_CREATED)
-async def create_posts(post: Post, db: Session = Depends(get_db)):
+async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db)):
     query = models.Post(**post.model_dump())
     db.add(query)
     db.commit()
@@ -69,7 +58,7 @@ def delete(id:int, db: Session = Depends(get_db)):
 
 
 @app.put("/posts/{id}", status_code = status.HTTP_200_OK)
-def update(id: int, post: Post, db: Session = Depends(get_db)):
+def update(id: int, post: schemas.PostCreate, db: Session = Depends(get_db)):
     query = db.query(models.Post).filter(models.Post.id == id)
 
     if query.first() is None:
