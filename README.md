@@ -36,3 +36,49 @@ use command <uvicorn app.main:app> to access the fastAPI
 - The ORM helps use classes as Models for our database
 - to install sqlalchemy: <pip install sqlalchemy>
 - search in fastapi documentation for SQL relational Databases and follow the steps 
+
+
+****************These are query methods to communicate with mysql manually without ORM************************
+config = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'admin',
+    'database': 'python_api',
+    'port': '3308'
+}
+try:
+    connection = mysql.connector.connect(**config)
+    cursor = connection.cursor(dictionary= True)
+except mysql.connector.Error as err:
+    print(f"Error: {err}")
+
+
+def get_posts():
+    get_query = "SELECT * FROM  posts"
+    cursor.execute(get_query)
+    return cursor.fetchall()
+
+def get_post_by_id(id: int):
+    get_query = f"SELECT * FROM  posts WHERE id = {id}"
+    cursor.execute(get_query)
+    return cursor.fetchall()
+
+def create_new_post(post:Post):
+    post_query = "INSERT INTO posts (title, content, published) VALUES (%s,%s,%s)"
+    values = (post.title, post.content, post.published)
+    cursor.execute(post_query, values)
+    return cursor.rowcount > 0
+
+def delete_post(id: int):
+    delete_query = "DELETE FROM posts WHERE id = %s"
+    values = (id,)
+    cursor.execute(delete_query, values)
+    return cursor.rowcount > 0
+
+def update_post(id: int, post: Post):
+    update_query = "UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s"
+    values = (post.title, post.content, post.published, id)
+    cursor.execute(update_query, values)
+    return cursor.rowcount > 0
+
+****************end***********************************

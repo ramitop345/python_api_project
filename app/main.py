@@ -17,62 +17,11 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'admin',
-    'database': 'python_api',
-    'port': '3308'
-}
-try:
-    connection = mysql.connector.connect(**config)
-    cursor = connection.cursor(dictionary= True)
-except mysql.connector.Error as err:
-    print(f"Error: {err}")
-
-
-
 # it is used for validation when requesting datafrom databank
 class Post(BaseModel):
     title: str
     content: str
     published: bool = True
-    rating: Optional[int] = None
-
-
-def get_posts():
-    get_query = "SELECT * FROM  posts"
-    cursor.execute(get_query)
-    return cursor.fetchall()
-
-def get_post_by_id(id: int):
-    get_query = f"SELECT * FROM  posts WHERE id = {id}"
-    cursor.execute(get_query)
-    return cursor.fetchall()
-
-def create_new_post(post:Post):
-    post_query = "INSERT INTO posts (title, content, published) VALUES (%s,%s,%s)"
-    values = (post.title, post.content, post.published)
-    cursor.execute(post_query, values)
-    return cursor.rowcount > 0
-
-def delete_post(id: int):
-    delete_query = "DELETE FROM posts WHERE id = %s"
-    values = (id,)
-    cursor.execute(delete_query, values)
-    return cursor.rowcount > 0
-
-def update_post(id: int, post: Post):
-    update_query = "UPDATE posts SET title = %s, content = %s, published = %s WHERE id = %s"
-    values = (post.title, post.content, post.published, id)
-    cursor.execute(update_query, values)
-    return cursor.rowcount > 0
-
-##################################
-@app.get("/sqlalchemy")
-def test_get(db: Session = Depends(get_db)):
-    return {"status": "success"}
-#################
 
 
 @app.get("/")
@@ -80,43 +29,52 @@ async def root():
     return {"message": "Hello World"}
 
 @app.post("/posts", status_code = status.HTTP_201_CREATED)
-async def create_posts(post: Post):
-    created = create_new_post(post)
-    if not created:
+async def create_posts(post: Post, db: Session = Depends(get_db)):
+    query = models.Post(**post.model_dump())
+    db.add(query)
+    db.commit()
+    db.refresh(query)
+    if  query in None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, 
                             detail = f"post was not created")
-    return {"data": "added new post"}
+    return {"data": query}
 
 @app.get("/posts")
-async def get_all_posts():
-    return {"data": get_posts()}
+async def get_all_posts(db: Session = Depends(get_db)):
+    query = db.query(models.Post).all()
+    return {"data": query}
 
 
 #the id is always a string so manually convert in to int if needed
 @app.get("/posts/{id}")
-async def get(id: int):
-    post = get_post_by_id(id)
-    if not post:
+async def get(id: int, db: Session = Depends(get_db)):
+    query = db.query(models.Post).filter(models.Post.id == id).first()
+    if query is None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, 
                             detail = f"post with id: {id} was not found")     
-    return {"Post details": post}
+    return {"Post details": query}
 
 
 @app.delete("/posts/{id}")
-def delete(id:int):
-    deleted = delete_post(id)
-    if not deleted:
+def delete(id:int, db: Session = Depends(get_db)):
+    query = db.query(models.Post).filter(models.Post.id == id)
+    
+    if query.first() is None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, 
                             detail = f"post with id: {id} was not found") 
+    query.delete(synchronize_session = False)
+    db.commit()
     return Response(status_code = status.HTTP_204_NO_CONTENT)
 
 
 
 @app.put("/posts/{id}", status_code = status.HTTP_200_OK)
-def update(id: int, post: Post):
-    updated = update_post(id, post)
-    if  not updated:
+def update(id: int, post: Post, db: Session = Depends(get_db)):
+    query = db.query(models.Post).filter(models.Post.id == id)
+
+    if query.first() is None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, 
                             detail = f"post with id: {id} was not found") 
-  
-    return {'data': updated}
+    query.update(post.model_dump(), synchronize_session = False)
+    db.commit()
+    return {'data': query.first()}
