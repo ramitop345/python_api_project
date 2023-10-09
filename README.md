@@ -36,6 +36,8 @@ use command <uvicorn app.main:app> to access the fastAPI
 - The ORM helps use classes as Models for our database
 - to install sqlalchemy: <pip install sqlalchemy>
 - search in fastapi documentation for SQL relational Databases and follow the steps 
+- instsall email validator if not already installded to validate emails: <pip install pydantic[email]>
+- install passlib to handle password hashes(password encryption) <pip install passlib[bcrypt]>
 
 
 ****************These are query methods to communicate with mysql manually without ORM************************
