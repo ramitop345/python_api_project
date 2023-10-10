@@ -13,17 +13,10 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
-class Post(PostBase):
-    id: int 
+class UserOut(BaseModel):
+    id: int
+    email: EmailStr
     created_at: Any
-    user_id: int
-    #this helps pydantic to recognise the output as dictionary although it is a class
-    #this helps limit the number of data that will be returned as response to a query
-    class Config:
-        from_attributes = True
-
-class UserCreate(UserBase):
-    pass
 
 class User(UserBase):
     id: int 
@@ -31,11 +24,20 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
-class UserOut(BaseModel):
-    id: int
-    email: EmailStr
+class Post(PostBase):
+    id: int 
     created_at: Any
+    user_id: int
+    # we created a relationship in models and the code below retrieves all information from the user that generated this post
+    #it is a faster way to than implementing a foreign key to get some data from other table
+    owner: UserOut
+    #this helps pydantic to recognise the output as dictionary although it is a class
+    #this helps limit the number of data that will be returned as response to a query
+    class Config:
+        from_attributes = True
 
+class UserCreate(UserBase):
+    pass
 
 class UserLogin(BaseModel):
     email: EmailStr

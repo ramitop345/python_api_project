@@ -22,7 +22,8 @@ async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), 
 
 @router.get("/", response_model = List[schemas.Post])
 async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    query = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
+    #query = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
+    query = db.query(models.Post).all()
     return query
 
 
