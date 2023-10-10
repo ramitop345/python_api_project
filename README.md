@@ -44,6 +44,7 @@ use command <uvicorn app.main:app> to access the fastAPI
 - install pydantic-settings(if not installed): <pip install pydantic-settings>
 - import BaseSettings from pydantic_settings and extend it
 - install python-dotenv if not installed and load it after Settings class <pip install python-dotenv>
+- a composite key is a primary key that spans multiple columns, this helps have two columns that always has different values
 
 
 ****************These are query methods to communicate with mysql manually without ORM************************
