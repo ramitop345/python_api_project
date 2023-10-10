@@ -1,6 +1,6 @@
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from .. import models, schemas, oauth2
-from typing import List
+from typing import List, Optional
 from ..database import get_db
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
@@ -19,11 +19,13 @@ async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), 
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, 
                             detail = f"post was not created")
     return query
-
+#use %20 in queries (like search) to represent space(like entering two words in query for search)
 @router.get("/", response_model = List[schemas.Post])
-async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[string] = ""):
     #query = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
-    query = db.query(models.Post).all()
+    #the limit parameter is now used to limit the number of posts that can be retrieved
+    #the offset parameter allows us to skip a certain number of posts
+    query = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
     return query
 
 
