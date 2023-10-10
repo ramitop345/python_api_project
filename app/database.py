@@ -1,16 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from .config import settings
 
 
-config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'admin',
-    'database': 'python_api',
-    'port': '3308'
-}
-SQLALCHEMY_DATABASE_URL = f'mysql+mysqlconnector://{config["user"]}:{config["password"]}@{config["host"]}:{config["port"]}/{config["database"]}'
+SQLALCHEMY_DATABASE_URL = f'mysql+mysqlconnector://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind= engine)

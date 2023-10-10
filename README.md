@@ -9,7 +9,7 @@ this is a course to learn basics of Python API Project
 - choose python.exe in venv folder als deault interpreter: view->command palette->search 
    python interpreter and type in path
 - activate venv in terminal: <venv\Scripts\activate.bat>
-- install fastapi : <pip install fastapi>
+- install fastapi : <pip install fastapi[all]>
 - go to fastapi.tiangolo.com/tutorial/first-steps/ for first use 
 - install uvicorn(if not installed) : <pip install uvicorn>
 - install postman to manage your http request froom fastapi
@@ -39,7 +39,11 @@ use command <uvicorn app.main:app> to access the fastAPI
 - instsall email validator if not already installded to validate emails: <pip install pydantic[email]>
 - install passlib to handle password hashes(password encryption) <pip install passlib[bcrypt]>
 - install python-jose[cryptography] to manage JWT encryption mechanisymn <pip install python-jose[cryptography]>
-install python multipart to handle OAuths Forms <pip install python-multipart>, no need to import
+- install python multipart to handle OAuths Forms <pip install python-multipart>, no need to import
+- to load env-variables, create a .env file and paste all the variables in
+- install pydantic-settings(if not installed): <pip install pydantic-settings>
+- import BaseSettings from pydantic_settings and extend it
+- install python-dotenv if not installed and load it after Settings class <pip install python-dotenv>
 
 
 ****************These are query methods to communicate with mysql manually without ORM************************

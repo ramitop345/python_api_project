@@ -21,7 +21,7 @@ async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), 
     return query
 #use %20 in queries (like search) to represent space(like entering two words in query for search)
 @router.get("/", response_model = List[schemas.Post])
-async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[string] = ""):
+async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     #query = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
     #the limit parameter is now used to limit the number of posts that can be retrieved
     #the offset parameter allows us to skip a certain number of posts
