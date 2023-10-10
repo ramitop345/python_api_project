@@ -16,6 +16,7 @@ class PostCreate(PostBase):
 class Post(PostBase):
     id: int 
     created_at: Any
+    user_id: int
     #this helps pydantic to recognise the output as dictionary although it is a class
     #this helps limit the number of data that will be returned as response to a query
     class Config:
