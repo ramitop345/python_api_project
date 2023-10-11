@@ -33,21 +33,30 @@ async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depen
     #the join method is by default a LEFT INNER JOIN
     result = db.query(models.Post, func.count(models.Vote.post_id).label("votes")
                       ).join(models.Vote, models.Vote.post_id == models.Post.id, 
-                             isouter= True).group_by(models.Post.id).all()
+                             isouter= True).group_by(models.Post.id).filter(
+                                 models.Post.title.contains(search)).limit(limit).offset(skip).all()
     #return query
     formatted_result = [{"post": post, "votes": votes} for post, votes in result]
     return formatted_result
 
 
 #the id is always a string so manually convert in to int if needed
-@router.get("/{id}", response_model = schemas.Post)
+#@router.get("/{id}", response_model = schemas.Post)
+@router.get("/{id}")
 async def get(id: int, db: Session = Depends(get_db)):
     query = db.query(models.Post).filter(models.Post.id == id).first()
     if query is None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, 
                             detail = f"post with id: {id} was not found")   
+    result = db.query(models.Post, func.count(models.Vote.post_id).label("votes")
+                      ).join(models.Vote, models.Vote.post_id == models.Post.id, 
+                             isouter= True).group_by(models.Post.id).filter(models.Post.id == id).first()
+    #return query
+    formatted_result = {"post": result[0], "votes": result[1]} 
+    return formatted_result
+
     
-    return query
+    #return query
 
 
 @router.delete("/{id}")

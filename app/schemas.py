@@ -40,7 +40,7 @@ class Post(PostBase):
     schema for sql queries with joins
 """
 class PostOut(PostBase):
-    post: Post
+    Post: Post
     votes: int
     class Config:
         from_attributes = True
