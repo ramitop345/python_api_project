@@ -36,6 +36,16 @@ class Post(PostBase):
     class Config:
         from_attributes = True
 
+"""
+    schema for sql queries with joins
+"""
+class PostOut(PostBase):
+    post: Post
+    votes: int
+    class Config:
+        from_attributes = True
+
+
 class UserCreate(UserBase):
     pass
 

@@ -91,3 +91,58 @@ def update_post(id: int, post: Post):
     return cursor.rowcount > 0
 
 ****************end***********************************
+
+
+
+
+************************JOINS***************************************
+1. INNER JOIN
+The INNER JOIN keyword selects records that have matching values in both tables.
+<sql>
+SELECT columns
+FROM table1
+INNER JOIN table2
+ON table1.column_name = table2.column_name;
+
+<to count the number of entries from the filter based on a col_name>
+SELECT columns, COUNT(col_name)
+FROM table1
+INNER JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+2. LEFT JOIN (or LEFT OUTER JOIN)
+The LEFT JOIN keyword returns all records from the left table (table1), and the matched records from the right table (table2). The result is NULL from the right side if there is no match.
+<sql>
+SELECT columns
+FROM table1
+LEFT JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+3. RIGHT JOIN (or RIGHT OUTER JOIN)
+The RIGHT JOIN keyword returns all records from the right table (table2), and the matched records from the left table (table1). The result is NULL from the left side when there is no match.
+<sql>
+SELECT columns
+FROM table1
+RIGHT JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+4. FULL JOIN (or FULL OUTER JOIN)
+The FULL JOIN keyword returns all records when there is a match in either the left (table1) or the right (table2) table records.
+<sql>
+SELECT columns
+FROM table1
+FULL JOIN table2
+ON table1.column_name = table2.column_name;
+
+
+5. CROSS JOIN
+The CROSS JOIN keyword returns the Cartesian product of the two tables, i.e., it combines each row from the first table with every row from the second table.
+<sql>
+SELECT columns
+FROM table1
+CROSS JOIN table2;
+
+*****************************END********************************************

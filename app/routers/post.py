@@ -4,6 +4,7 @@ from typing import List, Optional
 from ..database import get_db
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
+from sqlalchemy import func
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated = "auto")
 router = APIRouter(prefix = "/posts", tags = ['posts'])
@@ -20,13 +21,22 @@ async def create_posts(post: schemas.PostCreate, db: Session = Depends(get_db), 
                             detail = f"post was not created")
     return query
 #use %20 in queries (like search) to represent space(like entering two words in query for search)
-@router.get("/", response_model = List[schemas.Post])
+#@router.get("/", response_model = List[schemas.Post])
+@router.get("/")
 async def get_all_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     #query = db.query(models.Post).filter(models.Post.user_id == current_user.id).all()
     #the limit parameter is now used to limit the number of posts that can be retrieved
     #the offset parameter allows us to skip a certain number of posts
     query = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
-    return query
+    
+    #performing a join sql action below
+    #the join method is by default a LEFT INNER JOIN
+    result = db.query(models.Post, func.count(models.Vote.post_id).label("votes")
+                      ).join(models.Vote, models.Vote.post_id == models.Post.id, 
+                             isouter= True).group_by(models.Post.id).all()
+    #return query
+    formatted_result = [{"post": post, "votes": votes} for post, votes in result]
+    return formatted_result
 
 
 #the id is always a string so manually convert in to int if needed
@@ -35,7 +45,8 @@ async def get(id: int, db: Session = Depends(get_db)):
     query = db.query(models.Post).filter(models.Post.id == id).first()
     if query is None:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, 
-                            detail = f"post with id: {id} was not found")     
+                            detail = f"post with id: {id} was not found")   
+    
     return query
 
 
