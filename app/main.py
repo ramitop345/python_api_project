@@ -4,7 +4,9 @@ from .database import engine
 from .routers import post, user,auth,vote
 from .config import settings
 
-models.Base.metadata.create_all(bind=engine)
+#this command is now executed in alembic and no more needed here
+#it was used to generate all the tables that are created in the models file
+#models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

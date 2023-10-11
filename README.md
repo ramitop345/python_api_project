@@ -46,6 +46,9 @@ use command <uvicorn app.main:app> to access the fastAPI
 - install python-dotenv if not installed and load it after Settings class <pip install python-dotenv>
 - a composite key is a primary key that spans multiple columns, this helps have two columns that always has different values
 
+- install Alembec t Migrate/Modify Databases. this tool will help manage databases alteration so that we dont need to delete tables before updating those <pip install alembic>
+-initialise a new script directory for alembic: <alembic init <filename(alembic)>>
+
 
 ****************These are query methods to communicate with mysql manually without ORM************************
 config = {
