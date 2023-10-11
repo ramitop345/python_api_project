@@ -46,8 +46,13 @@ use command <uvicorn app.main:app> to access the fastAPI
 - install python-dotenv if not installed and load it after Settings class <pip install python-dotenv>
 - a composite key is a primary key that spans multiple columns, this helps have two columns that always has different values
 
-- install Alembec t Migrate/Modify Databases. this tool will help manage databases alteration so that we dont need to delete tables before updating those <pip install alembic>
+- install Alembic t Migrate/Modify Databases. this tool will help manage databases alteration so that we dont need to delete tables before updating those <pip install alembic>
 -initialise a new script directory for alembic: <alembic init <filename(alembic)>>
+- use <alembic revison autogenerate "msg"> to add a revision automatically from the models created or updated with the sqlalchemy model creation class"
+
+- importing CORS Dependency to manage domain restrictions <from fastapi.middleware.cors import CORSMiddleware>
+- complete documentation for CORS in Fastapi
+
 
 
 ****************These are query methods to communicate with mysql manually without ORM************************
@@ -149,3 +154,6 @@ FROM table1
 CROSS JOIN table2;
 
 *****************************END********************************************
+
+- use this command to copy all the installed packages to a folder <pip freeze > requirements.txt>
+- use this command to automatically install all the packages from a requirement file in a new python environment: <pip install -r requirements.txt>
