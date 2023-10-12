@@ -165,11 +165,15 @@ CROSS JOIN table2;
 - create an app <heroku create <app-name(unique)>>
 - a new remote is created called heroku in github(we now have origin and heroku)
 - use <git push heroku main> to push application to heroku
-create a new file called Procfile to specify the command you want to run for your app to start <Procfile> without extension and with capital letter
+- create a new file called Procfile to specify the command you want to run for your app to start <Procfile> without extension and with capital letter
 enter this command to start the app( for our case):
 <web: uvicorn app.main:app --host=0.0.0.0  --port=${PORT:-5000} >
 - save and push back to heroku
 go on heroku platform to launch your application
-- use heroku logs to view logs if there are issues
+- use <heroku logs> to view logs if there are issues
 - search for heroku sql(postgres or mysql) ttutorial to see how to create a mysql isntance in heroku
 - go to heroku dashboard and search for the new sql instance and and configure the connection settings to your database <11:48>
+-dont do alembic revisions in production environment, do it in developpment environemt and push it to to heroku main.
+- after starting the app, you have to run the alembic commands to upgrade the actual database situation in heroku mysql database
+- installing actuall tables in heroku: <heroku run "alembic upgrade head">
+- you can use the database infos in heroku to connect to your database from your local device
