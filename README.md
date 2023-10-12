@@ -157,3 +157,19 @@ CROSS JOIN table2;
 
 - use this command to copy all the installed packages to a folder <pip freeze > requirements.txt>
 - use this command to automatically install all the packages from a requirement file in a new python environment: <pip install -r requirements.txt>
+
+- use HEROKU to deploy your application for free
+- create an account there
+- install Heroku cli on your machine from Heroku website
+- log in to Heroku <heroku login>, it prompts a window to login
+- create an app <heroku create <app-name(unique)>>
+- a new remote is created called heroku in github(we now have origin and heroku)
+- use <git push heroku main> to push application to heroku
+create a new file called Procfile to specify the command you want to run for your app to start <Procfile> without extension and with capital letter
+enter this command to start the app( for our case):
+<web: uvicorn app.main:app --host=0.0.0.0  --port=${PORT:-5000} >
+- save and push back to heroku
+go on heroku platform to launch your application
+- use heroku logs to view logs if there are issues
+- search for heroku sql(postgres or mysql) ttutorial to see how to create a mysql isntance in heroku
+- go to heroku dashboard and search for the new sql instance and and configure the connection settings to your database <11:48>
