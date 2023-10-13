@@ -177,3 +177,45 @@ go on heroku platform to launch your application
 - after starting the app, you have to run the alembic commands to upgrade the actual database situation in heroku mysql database
 - installing actuall tables in heroku: <heroku run "alembic upgrade head">
 - you can use the database infos in heroku to connect to your database from your local device
+
+
+*************************Docker*****************************
+- building a docker container to store the app
+- install docker from web
+- create a file called <Dockerfile> without extension
+- add in all necessary configuration for build
+- build container <docker build -t docker_python_api_project .>
+- if a change is made only in code then just run the last command in dockerfile
+- if any new package is added in requirement file then run the 3 last commands
+- docker-compose can be used to run the containers, instead of just entering <docker run>
+- to run containers in docker yaml file so we are not directly connected to it: <docker-compose  up -d>
+- this are the two ways to pass in environemt file:
+****************************************************
+env_file:
+    - ./.env
+
+    <or>
+
+environment:
+    - DATABASE_HOSTNAME=local
+    - DATABASE_PASSWORD=adm
+    - DATABASE_USERNAME=ro
+    - DATABASE_PORT=3
+    - DATABASE_NAME=p
+    - SECRET_KEY=ghfgh5fghfg65j
+    - ALGORITHM=HS2
+    - ACCESS_TOKEN_EXPIRE_MINUTES=30
+*****************************
+
+- stop all containers <docker-composer down>
+- view all containers: <docker-compose ps -a>
+- open a specific container in shell mode in docker: <docker exec -it <container-name> bash>
+- binding docker files with local files: 
+  volumes:
+    <localpath>:<dockerpath>
+- create a new repository in your docker account if you want to save your appp in a docker
+- to login to the docker account <docker login> and follow steps
+- rename your image to push it to repository: <docker tag [image_name] [new_user_name(docker_username/repository_name:tag(optional))]>
+- use <docker push <image-name>> to push image to your repository after login in docker
+
+

@@ -1,0 +1,43 @@
+version: "3"
+services:
+  api:
+    # this builds Dockerfile
+    build: .
+    #this just tells api to wait for mysql to launch
+    depends_on:
+      - mysql
+    ports: 
+      - 8000:8000
+    #ro stands for read only
+    volumes:
+      - ./:/usr/src/app:ro
+    #this overrides the cmd line in Dockerfile and adds the reload option to it
+    # so that the app reloads everytime we make a change
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    #env_file:
+    #- ./.env
+    #this are environment keys that are used in the have to be specified in the yaml file
+    environment:
+      - DATABASE_HOSTNAME=mysql
+      - DATABASE_PASSWORD=admin
+      - DATABASE_USERNAME=root
+      - DATABASE_PORT=3308
+      - DATABASE_NAME=python_api
+      - SECRET_KEY=ghfgh5fghfg65jf65f65jf65jfgfg5h5grteg6hg6f5n655fhf6g5h
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: python_api
+      MYSQL_USER: root
+      MYSQL_PASSWORD: admin
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
