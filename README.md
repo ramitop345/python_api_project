@@ -218,4 +218,9 @@ environment:
 - rename your image to push it to repository: <docker tag [image_name] [new_user_name(docker_username/repository_name:tag(optional))]>
 - use <docker push <image-name>> to push image to your repository after login in docker
 
+*************************End*****************************
+
+**********************Testing***************************
+- install test package pytest <pip install pytest>
+
 
