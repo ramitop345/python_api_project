@@ -225,5 +225,5 @@ environment:
 - import Testclient from fastapi <from fastapi.testclient import TestClient>
 - you can specify what file to test: <pytest -n -s path//to//file.py>
 - to disable warning: <pytest --disable-warnings>
-
-
+- pass the <-x> flag if you want pytest to stop after the first test failure
+- using independant database for test purpose: <15:27>
