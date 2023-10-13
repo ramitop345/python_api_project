@@ -16,3 +16,10 @@ def return_5():
 
 def test_use_fixture(return_5):
     assert return_5 == 5
+
+def test_exception_in_code():
+    # instead of using the exception class, 
+    # you can also generate a child class of the exception class and use it here
+    with pytest.raises(Exception):
+        div = 5/0
+    assert True

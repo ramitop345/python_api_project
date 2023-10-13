@@ -222,5 +222,8 @@ environment:
 
 **********************Testing***************************
 - install test package pytest <pip install pytest>
+- import Testclient from fastapi <from fastapi.testclient import TestClient>
+- you can specify what file to test: <pytest -n -s path//to//file.py>
+- to disable warning: <pytest --disable-warnings>
 
 
